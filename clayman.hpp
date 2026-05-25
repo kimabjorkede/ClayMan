@@ -209,6 +209,17 @@ class ClayMan {
             return Clay__HashString(toClayString(id), 0);
         };
 
+        //Hashes string literal into a clay IDI
+        Clay_ElementId hashID(const Clay_String& id, uint32_t offset);
+
+        //Hashes string into a clay IDI
+        Clay_ElementId hashID(const std::string& id, uint32_t offset);
+
+        template<size_t N>
+        Clay_ElementId hashID(const char(&id)[N], uint32_t offset){
+            return Clay__HashStringWithOffset(toClayString(id), offset, 0);
+        };
+
 
         //Gets clay internal left-mouse-button state this frame
         bool mousePressed();

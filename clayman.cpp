@@ -276,6 +276,17 @@ Clay_ElementId ClayMan::hashID(const std::string& id){
     return Clay__HashString(toClayString(id), 0);
 }
 
+Clay_ElementId ClayMan::hashID(const Clay_String& id, uint32_t offset){
+    return Clay__HashStringWithOffset(id, offset, 0);
+}
+
+Clay_ElementId ClayMan::hashID(const std::string& id, uint32_t offset){
+    return Clay__HashStringWithOffset(toClayString(id), offset, 0);
+}
+
+
+
+
 bool ClayMan::mousePressed(){
     return Clay_GetCurrentContext()->pointerInfo.state == CLAY_POINTER_DATA_PRESSED_THIS_FRAME;
 }
