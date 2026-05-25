@@ -90,6 +90,13 @@ void ClayMan::element(){
     closeElement();  
 }
 
+void ClayMan::element(const Clay_ElementId &element_id){
+    openElementWithID(element_id);
+    Clay_ElementDeclaration configs;
+    applyElementConfigs(configs);
+    closeElement();
+}
+
 void ClayMan::element(Clay_ElementDeclaration configs, std::function<void()> childLambda) {
     
     openElement();
@@ -100,14 +107,40 @@ void ClayMan::element(Clay_ElementDeclaration configs, std::function<void()> chi
     closeElement();           
 }
 
+void ClayMan::element(const Clay_ElementId &element_id, Clay_ElementDeclaration configs, std::function<void()> childLambda) {
+    openElementWithID(element_id);
+    applyElementConfigs(configs);
+    if(childLambda != nullptr){
+        childLambda();
+    }
+    closeElement();
+}
+
 void ClayMan::element(Clay_ElementDeclaration configs){
     openElement();
     applyElementConfigs(configs);
     closeElement();
 }
 
+void ClayMan::element(const Clay_ElementId& element_id, Clay_ElementDeclaration configs){
+    openElementWithID(element_id);
+    applyElementConfigs(configs);
+    closeElement();
+}
+
+
 void ClayMan::element(std::function<void()> childLambda){
     openElement();
+    Clay_ElementDeclaration configs;
+    applyElementConfigs(configs);
+    if(childLambda != nullptr){
+        childLambda();
+    }
+    closeElement();
+}
+
+void ClayMan::element(const Clay_ElementId &element_id, std::function<void()> childLambda){
+    openElementWithID(element_id);
     Clay_ElementDeclaration configs;
     applyElementConfigs(configs);
     if(childLambda != nullptr){
@@ -123,6 +156,12 @@ void ClayMan::openElement(Clay_ElementDeclaration configs){
 
 void ClayMan::openElement(){
     Clay__OpenElement();
+    openElementCount++;
+}
+
+void ClayMan::openElementWithID(const Clay_ElementId &element_id)
+{
+    Clay__OpenElementWithId(element_id);
     openElementCount++;
 }
 
@@ -230,11 +269,11 @@ Clay_ChildAlignment ClayMan::centerXY(){
 }
 
 Clay_ElementId ClayMan::hashID(const Clay_String& id){
-    return Clay__HashString(id, 0, 0);
+    return Clay__HashString(id, 0);
 }
 
 Clay_ElementId ClayMan::hashID(const std::string& id){
-    return Clay__HashString(toClayString(id), 0, 0);
+    return Clay__HashString(toClayString(id), 0);
 }
 
 bool ClayMan::mousePressed(){

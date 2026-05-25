@@ -85,34 +85,51 @@ class ClayMan {
         // Creates an element in-place. Automatically opens, applies default configs, and closes.
         void element();
 
+        // Creates an element in-place, specified by an Element ID. Automatically opens, applies default configs, and closes.
+        void element(const Clay_ElementId &element_id);
+
         // Creates an element in-place. Automatically opens, applies configs, calls all child elements, and closes.
         void element(Clay_ElementDeclaration configs, std::function<void()> childLambda);
-        
-        // Creates an element in-place. Automatically opens, applies configs, calls all child elements, and closes.
+
+        // Creates an element in-place, specified by an Element ID. Automatically opens, applies configs, calls all child elements, and closes.
+        void element(const Clay_ElementId &element_id, Clay_ElementDeclaration configs, std::function<void()> childLambda);
+
+        // Creates an element in-place, specified by an Element ID. Automatically opens, applies configs, calls all child elements, and closes.
         template <typename T>
-        void element(T childLambda, Clay_ElementDeclaration configs) {
-            if (std::invocable<T>) {
-                openElement();
-                applyElementConfigs(configs);
-                if((std::function<void()>)childLambda != nullptr){
-                    childLambda();
+        void element(T childLambda, const Clay_ElementId &element_id, Clay_ElementDeclaration configs) {
+                if (std::invocable<T>) {
+                    openElementWithID(element_id);
+                    applyElementConfigs(configs);
+                    if((std::function<void()>)childLambda != nullptr){
+                        childLambda();
+                    }
+                    closeElement();
+                } else {
+                    openElement();
+                    applyElementConfigs(configs);
+                    closeElement();
                 }
-                closeElement();
-            } else {
-                openElement();
-                applyElementConfigs(configs);
-                closeElement();
             }
-        }
 
         // Creates an element in-place. Automatically opens, applies configs, and closes.
         void element(Clay_ElementDeclaration configs);
 
+        // Creates an element in-place, specified by an Element ID. Automatically opens, applies configs, and closes.
+        void element(const Clay_ElementId &element_id, Clay_ElementDeclaration configs);
+
         // Creates an element in-place. Automatically opens, applies default configs, calls all child elements, and closes.
         void element(std::function<void()> childLambda);
 
+        // Creates an element in-place, specified by an Element ID. Automatically opens, applies default configs, calls all child elements, and closes.
+        void element(const Clay_ElementId &element_id,
+               std::function<void()> childLambda);
+
         //Manually opens an element with configurations, call closeElement() after children (if any) to close.
         void openElement(Clay_ElementDeclaration configs);
+
+        // Manually opens an element with default configuration and with an ElementID,
+        // call closeElement() after children (if any) to close.
+        void openElementWithID(const Clay_ElementId &element_id);
 
         //Manually opens an element with default configurations, call closeElement() after children (if any) to close.
         void openElement();
@@ -189,7 +206,7 @@ class ClayMan {
 
         template<size_t N>
         Clay_ElementId hashID(const char(&id)[N]){
-            return Clay__HashString(toClayString(id), 0, 0);
+            return Clay__HashString(toClayString(id), 0);
         };
 
 
