@@ -68,6 +68,8 @@ void ClayMan::updateClayState(
         (Clay_Vector2) { scrollDeltaX, scrollDeltaY },
         frameTime
     );
+
+    clay_frametime = frameTime;
 }
 
 void ClayMan::beginLayout(){
@@ -80,7 +82,7 @@ void ClayMan::beginLayout(){
 Clay_RenderCommandArray ClayMan::endLayout(){
     closeAllElements();
     measureTime();
-    return Clay_EndLayout();
+    return Clay_EndLayout(clay_frametime);
 }
 
 void ClayMan::element(){
@@ -181,14 +183,14 @@ void ClayMan::textElement(const std::string& text, const Clay_TextElementConfig 
     Clay_String cs = toClayString(text);
     Clay__OpenTextElement(
         cs, 
-        Clay__StoreTextElementConfig((Clay__Clay_TextElementConfigWrapper(textElementConfig)).wrapped)
+        (Clay__Clay_TextElementConfigWrapper(textElementConfig)).wrapped
     );
 }
 
 void ClayMan::textElement(const Clay_String& text, const Clay_TextElementConfig textElementConfig){
     Clay__OpenTextElement(
         text, 
-        Clay__StoreTextElementConfig((Clay__Clay_TextElementConfigWrapper(textElementConfig)).wrapped)
+        (Clay__Clay_TextElementConfigWrapper(textElementConfig)).wrapped
     );
 }
 

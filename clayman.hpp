@@ -149,7 +149,7 @@ class ClayMan {
             Clay_String cs = toClayString(text);
             Clay__OpenTextElement(
                 cs,
-                Clay__StoreTextElementConfig((Clay__Clay_TextElementConfigWrapper(textElementConfig)).wrapped)
+                (Clay__Clay_TextElementConfigWrapper(textElementConfig)).wrapped
             );
         }
 
@@ -319,6 +319,9 @@ class ClayMan {
         static void handleErrors(Clay_ErrorData errorData) {
             printf("%s", errorData.errorText.chars);
         }
+
+        // For Clay's EndFrame
+        float clay_frametime = 0;
 
         /////////for performance measuring/////////
         long long frametime = 0;
